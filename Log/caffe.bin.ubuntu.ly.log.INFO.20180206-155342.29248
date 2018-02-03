@@ -1,0 +1,574 @@
+Log file created at: 2018/02/06 15:53:42
+Running on machine: ubuntu
+Log line format: [IWEF]mmdd hh:mm:ss.uuuuuu threadid file:line] msg
+I0206 15:53:42.045927 29248 caffe.cpp:284] Use CPU.
+I0206 15:53:42.047621 29248 net.cpp:294] The NetState phase (1) differed from the phase (0) specified by a rule in layer mnist
+I0206 15:53:42.047852 29248 net.cpp:51] Initializing net from parameters: 
+name: "LeNet"
+state {
+  phase: TEST
+  level: 0
+  stage: ""
+}
+layer {
+  name: "mnist"
+  type: "Data"
+  top: "data"
+  top: "label"
+  include {
+    phase: TEST
+  }
+  transform_param {
+    scale: 0.00390625
+  }
+  data_param {
+    source: "examples/mnist/mnist_test_lmdb"
+    batch_size: 100
+    backend: LMDB
+  }
+}
+layer {
+  name: "conv1"
+  type: "Convolution"
+  bottom: "data"
+  top: "conv1"
+  param {
+    lr_mult: 1
+  }
+  param {
+    lr_mult: 2
+  }
+  convolution_param {
+    num_output: 20
+    kernel_size: 5
+    stride: 1
+    weight_filler {
+      type: "xavier"
+    }
+    bias_filler {
+      type: "constant"
+    }
+  }
+}
+layer {
+  name: "pool1"
+  type: "Pooling"
+  bottom: "conv1"
+  top: "pool1"
+  pooling_param {
+    pool: MAX
+    kernel_size: 2
+    stride: 2
+  }
+}
+layer {
+  name: "conv2"
+  type: "Convolution"
+  bottom: "pool1"
+  top: "conv2"
+  param {
+    lr_mult: 1
+  }
+  param {
+    lr_mult: 2
+  }
+  convolution_param {
+    num_output: 50
+    kernel_size: 5
+    stride: 1
+    weight_filler {
+      type: "xavier"
+    }
+    bias_filler {
+      type: "constant"
+    }
+  }
+}
+layer {
+  name: "pool2"
+  type: "Pooling"
+  bottom: "conv2"
+  top: "pool2"
+  pooling_param {
+    pool: MAX
+    kernel_size: 2
+    stride: 2
+  }
+}
+layer {
+  name: "ip1"
+  type: "InnerProduct"
+  bottom: "pool2"
+  top: "ip1"
+  param {
+    lr_mult: 1
+  }
+  param {
+    lr_mult: 2
+  }
+  inner_product_param {
+    num_output: 500
+    weight_filler {
+      type: "xavier"
+    }
+    bias_filler {
+      type: "constant"
+    }
+  }
+}
+layer {
+  name: "relu1"
+  type: "ReLU"
+  bottom: "ip1"
+  top: "ip1"
+}
+layer {
+  name: "ip2"
+  type: "InnerProduct"
+  bottom: "ip1"
+  top: "ip2"
+  param {
+    lr_mult: 1
+  }
+  param {
+    lr_mult: 2
+  }
+  inner_product_param {
+    num_output: 10
+    weight_filler {
+      type: "xavier"
+    }
+    bias_filler {
+      type: "constant"
+    }
+  }
+}
+layer {
+  name: "accuracy"
+  type: "MyAccuracy"
+  bottom: "ip2"
+  bottom: "label"
+  top: "accuracy"
+  include {
+    phase: TEST
+  }
+}
+layer {
+  name: "loss"
+  type: "SoftmaxWithLoss"
+  bottom: "ip2"
+  bottom: "label"
+  top: "loss"
+}
+I0206 15:53:42.051671 29248 layer_factory.hpp:77] Creating layer mnist
+I0206 15:53:42.052070 29248 db_lmdb.cpp:35] Opened lmdb examples/mnist/mnist_test_lmdb
+I0206 15:53:42.052150 29248 net.cpp:84] Creating Layer mnist
+I0206 15:53:42.052196 29248 net.cpp:380] mnist -> data
+I0206 15:53:42.052247 29248 net.cpp:380] mnist -> label
+I0206 15:53:42.052363 29248 data_layer.cpp:45] output data size: 100,1,28,28
+I0206 15:53:42.053314 29248 net.cpp:122] Setting up mnist
+I0206 15:53:42.053381 29248 net.cpp:129] Top shape: 100 1 28 28 (78400)
+I0206 15:53:42.053421 29248 net.cpp:129] Top shape: 100 (100)
+I0206 15:53:42.053457 29248 net.cpp:137] Memory required for data: 314000
+I0206 15:53:42.053495 29248 layer_factory.hpp:77] Creating layer label_mnist_1_split
+I0206 15:53:42.053539 29248 net.cpp:84] Creating Layer label_mnist_1_split
+I0206 15:53:42.053577 29248 net.cpp:406] label_mnist_1_split <- label
+I0206 15:53:42.053618 29248 net.cpp:380] label_mnist_1_split -> label_mnist_1_split_0
+I0206 15:53:42.053658 29248 net.cpp:380] label_mnist_1_split -> label_mnist_1_split_1
+I0206 15:53:42.053702 29248 net.cpp:122] Setting up label_mnist_1_split
+I0206 15:53:42.053740 29248 net.cpp:129] Top shape: 100 (100)
+I0206 15:53:42.053776 29248 net.cpp:129] Top shape: 100 (100)
+I0206 15:53:42.053808 29248 net.cpp:137] Memory required for data: 314800
+I0206 15:53:42.053843 29248 layer_factory.hpp:77] Creating layer conv1
+I0206 15:53:42.053889 29248 net.cpp:84] Creating Layer conv1
+I0206 15:53:42.053926 29248 net.cpp:406] conv1 <- data
+I0206 15:53:42.054011 29248 net.cpp:380] conv1 -> conv1
+I0206 15:53:42.054088 29248 net.cpp:122] Setting up conv1
+I0206 15:53:42.054100 29248 net.cpp:129] Top shape: 100 20 24 24 (1152000)
+I0206 15:53:42.054105 29248 net.cpp:137] Memory required for data: 4922800
+I0206 15:53:42.054116 29248 layer_factory.hpp:77] Creating layer pool1
+I0206 15:53:42.054139 29248 net.cpp:84] Creating Layer pool1
+I0206 15:53:42.054147 29248 net.cpp:406] pool1 <- conv1
+I0206 15:53:42.054152 29248 net.cpp:380] pool1 -> pool1
+I0206 15:53:42.054167 29248 net.cpp:122] Setting up pool1
+I0206 15:53:42.054174 29248 net.cpp:129] Top shape: 100 20 12 12 (288000)
+I0206 15:53:42.054178 29248 net.cpp:137] Memory required for data: 6074800
+I0206 15:53:42.054183 29248 layer_factory.hpp:77] Creating layer conv2
+I0206 15:53:42.054193 29248 net.cpp:84] Creating Layer conv2
+I0206 15:53:42.054198 29248 net.cpp:406] conv2 <- pool1
+I0206 15:53:42.054204 29248 net.cpp:380] conv2 -> conv2
+I0206 15:53:42.054380 29248 net.cpp:122] Setting up conv2
+I0206 15:53:42.054390 29248 net.cpp:129] Top shape: 100 50 8 8 (320000)
+I0206 15:53:42.054395 29248 net.cpp:137] Memory required for data: 7354800
+I0206 15:53:42.054404 29248 layer_factory.hpp:77] Creating layer pool2
+I0206 15:53:42.054410 29248 net.cpp:84] Creating Layer pool2
+I0206 15:53:42.054415 29248 net.cpp:406] pool2 <- conv2
+I0206 15:53:42.054421 29248 net.cpp:380] pool2 -> pool2
+I0206 15:53:42.054430 29248 net.cpp:122] Setting up pool2
+I0206 15:53:42.054436 29248 net.cpp:129] Top shape: 100 50 4 4 (80000)
+I0206 15:53:42.054440 29248 net.cpp:137] Memory required for data: 7674800
+I0206 15:53:42.054445 29248 layer_factory.hpp:77] Creating layer ip1
+I0206 15:53:42.054453 29248 net.cpp:84] Creating Layer ip1
+I0206 15:53:42.054458 29248 net.cpp:406] ip1 <- pool2
+I0206 15:53:42.054466 29248 net.cpp:380] ip1 -> ip1
+I0206 15:53:42.057162 29248 net.cpp:122] Setting up ip1
+I0206 15:53:42.062090 29248 net.cpp:129] Top shape: 100 500 (50000)
+I0206 15:53:42.062144 29248 net.cpp:137] Memory required for data: 7874800
+I0206 15:53:42.062193 29248 layer_factory.hpp:77] Creating layer relu1
+I0206 15:53:42.062238 29248 net.cpp:84] Creating Layer relu1
+I0206 15:53:42.062276 29248 net.cpp:406] relu1 <- ip1
+I0206 15:53:42.062314 29248 net.cpp:367] relu1 -> ip1 (in-place)
+I0206 15:53:42.062366 29248 net.cpp:122] Setting up relu1
+I0206 15:53:42.062405 29248 net.cpp:129] Top shape: 100 500 (50000)
+I0206 15:53:42.062440 29248 net.cpp:137] Memory required for data: 8074800
+I0206 15:53:42.062474 29248 layer_factory.hpp:77] Creating layer ip2
+I0206 15:53:42.062516 29248 net.cpp:84] Creating Layer ip2
+I0206 15:53:42.062552 29248 net.cpp:406] ip2 <- ip1
+I0206 15:53:42.062590 29248 net.cpp:380] ip2 -> ip2
+I0206 15:53:42.062680 29248 net.cpp:122] Setting up ip2
+I0206 15:53:42.062722 29248 net.cpp:129] Top shape: 100 10 (1000)
+I0206 15:53:42.062757 29248 net.cpp:137] Memory required for data: 8078800
+I0206 15:53:42.062793 29248 layer_factory.hpp:77] Creating layer ip2_ip2_0_split
+I0206 15:53:42.062831 29248 net.cpp:84] Creating Layer ip2_ip2_0_split
+I0206 15:53:42.062866 29248 net.cpp:406] ip2_ip2_0_split <- ip2
+I0206 15:53:42.062903 29248 net.cpp:380] ip2_ip2_0_split -> ip2_ip2_0_split_0
+I0206 15:53:42.064301 29248 net.cpp:380] ip2_ip2_0_split -> ip2_ip2_0_split_1
+I0206 15:53:42.064365 29248 net.cpp:122] Setting up ip2_ip2_0_split
+I0206 15:53:42.064406 29248 net.cpp:129] Top shape: 100 10 (1000)
+I0206 15:53:42.064443 29248 net.cpp:129] Top shape: 100 10 (1000)
+I0206 15:53:42.064478 29248 net.cpp:137] Memory required for data: 8086800
+I0206 15:53:42.064513 29248 layer_factory.hpp:77] Creating layer accuracy
+I0206 15:53:42.064558 29248 net.cpp:84] Creating Layer accuracy
+I0206 15:53:42.065548 29248 net.cpp:406] accuracy <- ip2_ip2_0_split_0
+I0206 15:53:42.065593 29248 net.cpp:406] accuracy <- label_mnist_1_split_0
+I0206 15:53:42.065636 29248 net.cpp:380] accuracy -> accuracy
+I0206 15:53:42.065681 29248 net.cpp:122] Setting up accuracy
+I0206 15:53:42.065721 29248 net.cpp:129] Top shape: (1)
+I0206 15:53:42.065757 29248 net.cpp:137] Memory required for data: 8086804
+I0206 15:53:42.065791 29248 layer_factory.hpp:77] Creating layer loss
+I0206 15:53:42.065829 29248 net.cpp:84] Creating Layer loss
+I0206 15:53:42.065865 29248 net.cpp:406] loss <- ip2_ip2_0_split_1
+I0206 15:53:42.065901 29248 net.cpp:406] loss <- label_mnist_1_split_1
+I0206 15:53:42.066013 29248 net.cpp:380] loss -> loss
+I0206 15:53:42.066066 29248 layer_factory.hpp:77] Creating layer loss
+I0206 15:53:42.066118 29248 net.cpp:122] Setting up loss
+I0206 15:53:42.066176 29248 net.cpp:129] Top shape: (1)
+I0206 15:53:42.066212 29248 net.cpp:132]     with loss weight 1
+I0206 15:53:42.066298 29248 net.cpp:137] Memory required for data: 8086808
+I0206 15:53:42.066334 29248 net.cpp:198] loss needs backward computation.
+I0206 15:53:42.066370 29248 net.cpp:200] accuracy does not need backward computation.
+I0206 15:53:42.066406 29248 net.cpp:198] ip2_ip2_0_split needs backward computation.
+I0206 15:53:42.066442 29248 net.cpp:198] ip2 needs backward computation.
+I0206 15:53:42.066475 29248 net.cpp:198] relu1 needs backward computation.
+I0206 15:53:42.066510 29248 net.cpp:198] ip1 needs backward computation.
+I0206 15:53:42.066545 29248 net.cpp:198] pool2 needs backward computation.
+I0206 15:53:42.066579 29248 net.cpp:198] conv2 needs backward computation.
+I0206 15:53:42.066614 29248 net.cpp:198] pool1 needs backward computation.
+I0206 15:53:42.066649 29248 net.cpp:198] conv1 needs backward computation.
+I0206 15:53:42.066684 29248 net.cpp:200] label_mnist_1_split does not need backward computation.
+I0206 15:53:42.066720 29248 net.cpp:200] mnist does not need backward computation.
+I0206 15:53:42.066753 29248 net.cpp:242] This network produces output accuracy
+I0206 15:53:42.066788 29248 net.cpp:242] This network produces output loss
+I0206 15:53:42.066830 29248 net.cpp:255] Network initialization done.
+I0206 15:53:42.105657 29248 caffe.cpp:290] Running for 100 iterations.
+I0206 15:53:42.149464 29248 my_accuracy_layer.cpp:88] outer_num_ 36, predict_num 2, label_value 7
+I0206 15:53:42.149590 29248 my_accuracy_layer.cpp:88] outer_num_ 62, predict_num 5, label_value 9
+I0206 15:53:42.149827 29248 caffe.cpp:313] Batch 0, accuracy = 0.98
+I0206 15:53:42.149885 29248 caffe.cpp:313] Batch 0, loss = 0.0205015
+I0206 15:53:42.189373 29248 my_accuracy_layer.cpp:88] outer_num_ 15, predict_num 9, label_value 4
+I0206 15:53:42.189657 29248 caffe.cpp:313] Batch 1, accuracy = 0.99
+I0206 15:53:42.189710 29248 caffe.cpp:313] Batch 1, loss = 0.0125004
+I0206 15:53:42.227389 29248 my_accuracy_layer.cpp:88] outer_num_ 47, predict_num 2, label_value 4
+I0206 15:53:42.227664 29248 caffe.cpp:313] Batch 2, accuracy = 0.99
+I0206 15:53:42.227717 29248 caffe.cpp:313] Batch 2, loss = 0.0172246
+I0206 15:53:42.262929 29248 my_accuracy_layer.cpp:88] outer_num_ 40, predict_num 3, label_value 5
+I0206 15:53:42.263231 29248 caffe.cpp:313] Batch 3, accuracy = 0.99
+I0206 15:53:42.263284 29248 caffe.cpp:313] Batch 3, loss = 0.0295439
+I0206 15:53:42.297921 29248 my_accuracy_layer.cpp:88] outer_num_ 45, predict_num 0, label_value 6
+I0206 15:53:42.298118 29248 my_accuracy_layer.cpp:88] outer_num_ 49, predict_num 5, label_value 3
+I0206 15:53:42.298393 29248 caffe.cpp:313] Batch 4, accuracy = 0.98
+I0206 15:53:42.298454 29248 caffe.cpp:313] Batch 4, loss = 0.105197
+I0206 15:53:42.335321 29248 my_accuracy_layer.cpp:88] outer_num_ 82, predict_num 2, label_value 8
+I0206 15:53:42.335566 29248 caffe.cpp:313] Batch 5, accuracy = 0.99
+I0206 15:53:42.335618 29248 caffe.cpp:313] Batch 5, loss = 0.0426375
+I0206 15:53:42.373913 29248 my_accuracy_layer.cpp:88] outer_num_ 59, predict_num 1, label_value 2
+I0206 15:53:42.374204 29248 caffe.cpp:313] Batch 6, accuracy = 0.99
+I0206 15:53:42.374258 29248 caffe.cpp:313] Batch 6, loss = 0.0598371
+I0206 15:53:42.409868 29248 my_accuracy_layer.cpp:88] outer_num_ 20, predict_num 8, label_value 5
+I0206 15:53:42.410161 29248 caffe.cpp:313] Batch 7, accuracy = 0.99
+I0206 15:53:42.410214 29248 caffe.cpp:313] Batch 7, loss = 0.0374605
+I0206 15:53:42.446101 29248 my_accuracy_layer.cpp:88] outer_num_ 13, predict_num 8, label_value 9
+I0206 15:53:42.446382 29248 caffe.cpp:313] Batch 8, accuracy = 0.99
+I0206 15:53:42.446436 29248 caffe.cpp:313] Batch 8, loss = 0.0138339
+I0206 15:53:42.482086 29248 my_accuracy_layer.cpp:88] outer_num_ 47, predict_num 9, label_value 8
+I0206 15:53:42.482370 29248 caffe.cpp:313] Batch 9, accuracy = 0.99
+I0206 15:53:42.482424 29248 caffe.cpp:313] Batch 9, loss = 0.0406442
+I0206 15:53:42.517001 29248 my_accuracy_layer.cpp:88] outer_num_ 14, predict_num 5, label_value 6
+I0206 15:53:42.517122 29248 my_accuracy_layer.cpp:88] outer_num_ 39, predict_num 1, label_value 7
+I0206 15:53:42.517323 29248 caffe.cpp:313] Batch 10, accuracy = 0.98
+I0206 15:53:42.517374 29248 caffe.cpp:313] Batch 10, loss = 0.0602654
+I0206 15:53:42.557282 29248 my_accuracy_layer.cpp:88] outer_num_ 82, predict_num 5, label_value 6
+I0206 15:53:42.557536 29248 caffe.cpp:313] Batch 11, accuracy = 0.99
+I0206 15:53:42.557590 29248 caffe.cpp:313] Batch 11, loss = 0.0354452
+I0206 15:53:42.596855 29248 my_accuracy_layer.cpp:88] outer_num_ 26, predict_num 2, label_value 7
+I0206 15:53:42.596966 29248 my_accuracy_layer.cpp:88] outer_num_ 32, predict_num 4, label_value 9
+I0206 15:53:42.597028 29248 my_accuracy_layer.cpp:88] outer_num_ 47, predict_num 5, label_value 9
+I0206 15:53:42.597226 29248 caffe.cpp:313] Batch 12, accuracy = 0.97
+I0206 15:53:42.597276 29248 caffe.cpp:313] Batch 12, loss = 0.127881
+I0206 15:53:42.635416 29248 my_accuracy_layer.cpp:88] outer_num_ 19, predict_num 3, label_value 8
+I0206 15:53:42.635545 29248 my_accuracy_layer.cpp:88] outer_num_ 93, predict_num 3, label_value 5
+I0206 15:53:42.635742 29248 caffe.cpp:313] Batch 13, accuracy = 0.98
+I0206 15:53:42.635794 29248 caffe.cpp:313] Batch 13, loss = 0.032552
+I0206 15:53:42.672818 29248 my_accuracy_layer.cpp:88] outer_num_ 14, predict_num 7, label_value 9
+I0206 15:53:42.673132 29248 caffe.cpp:313] Batch 14, accuracy = 0.99
+I0206 15:53:42.673225 29248 caffe.cpp:313] Batch 14, loss = 0.0368384
+I0206 15:53:42.709906 29248 my_accuracy_layer.cpp:88] outer_num_ 30, predict_num 7, label_value 8
+I0206 15:53:42.714409 29248 my_accuracy_layer.cpp:88] outer_num_ 53, predict_num 3, label_value 9
+I0206 15:53:42.714601 29248 caffe.cpp:313] Batch 15, accuracy = 0.98
+I0206 15:53:42.714615 29248 caffe.cpp:313] Batch 15, loss = 0.0468958
+I0206 15:53:42.753851 29248 my_accuracy_layer.cpp:88] outer_num_ 21, predict_num 6, label_value 0
+I0206 15:53:42.754199 29248 caffe.cpp:313] Batch 16, accuracy = 0.99
+I0206 15:53:42.754257 29248 caffe.cpp:313] Batch 16, loss = 0.0213111
+I0206 15:53:42.790817 29248 my_accuracy_layer.cpp:88] outer_num_ 9, predict_num 3, label_value 9
+I0206 15:53:42.791133 29248 caffe.cpp:313] Batch 17, accuracy = 0.99
+I0206 15:53:42.791191 29248 caffe.cpp:313] Batch 17, loss = 0.0244626
+I0206 15:53:42.826333 29248 my_accuracy_layer.cpp:88] outer_num_ 78, predict_num 3, label_value 8
+I0206 15:53:42.826612 29248 caffe.cpp:313] Batch 18, accuracy = 0.99
+I0206 15:53:42.826666 29248 caffe.cpp:313] Batch 18, loss = 0.0113848
+I0206 15:53:42.863817 29248 my_accuracy_layer.cpp:88] outer_num_ 1, predict_num 4, label_value 9
+I0206 15:53:42.864102 29248 caffe.cpp:313] Batch 19, accuracy = 0.99
+I0206 15:53:42.868926 29248 caffe.cpp:313] Batch 19, loss = 0.0586378
+I0206 15:53:42.909186 29248 my_accuracy_layer.cpp:88] outer_num_ 35, predict_num 3, label_value 5
+I0206 15:53:42.909306 29248 my_accuracy_layer.cpp:88] outer_num_ 98, predict_num 0, label_value 2
+I0206 15:53:42.909505 29248 caffe.cpp:313] Batch 20, accuracy = 0.98
+I0206 15:53:42.909556 29248 caffe.cpp:313] Batch 20, loss = 0.0818389
+I0206 15:53:42.948411 29248 my_accuracy_layer.cpp:88] outer_num_ 18, predict_num 0, label_value 6
+I0206 15:53:42.948535 29248 my_accuracy_layer.cpp:88] outer_num_ 30, predict_num 9, label_value 4
+I0206 15:53:42.948576 29248 my_accuracy_layer.cpp:88] outer_num_ 35, predict_num 1, label_value 6
+I0206 15:53:42.948781 29248 caffe.cpp:313] Batch 21, accuracy = 0.97
+I0206 15:53:42.948832 29248 caffe.cpp:313] Batch 21, loss = 0.0516603
+I0206 15:53:42.987485 29248 my_accuracy_layer.cpp:88] outer_num_ 93, predict_num 0, label_value 9
+I0206 15:53:42.991936 29248 caffe.cpp:313] Batch 22, accuracy = 0.99
+I0206 15:53:42.991966 29248 caffe.cpp:313] Batch 22, loss = 0.0452327
+I0206 15:53:43.031540 29248 my_accuracy_layer.cpp:88] outer_num_ 69, predict_num 3, label_value 5
+I0206 15:53:43.031998 29248 caffe.cpp:313] Batch 23, accuracy = 0.99
+I0206 15:53:43.032086 29248 caffe.cpp:313] Batch 23, loss = 0.035644
+I0206 15:53:43.069743 29248 my_accuracy_layer.cpp:88] outer_num_ 14, predict_num 4, label_value 9
+I0206 15:53:43.069878 29248 my_accuracy_layer.cpp:88] outer_num_ 62, predict_num 0, label_value 2
+I0206 15:53:43.070127 29248 caffe.cpp:313] Batch 24, accuracy = 0.98
+I0206 15:53:43.070204 29248 caffe.cpp:313] Batch 24, loss = 0.0678999
+I0206 15:53:43.108697 29248 my_accuracy_layer.cpp:88] outer_num_ 97, predict_num 3, label_value 5
+I0206 15:53:43.108989 29248 caffe.cpp:313] Batch 25, accuracy = 0.99
+I0206 15:53:43.109052 29248 caffe.cpp:313] Batch 25, loss = 0.0657793
+I0206 15:53:43.147894 29248 my_accuracy_layer.cpp:88] outer_num_ 48, predict_num 5, label_value 9
+I0206 15:53:43.148054 29248 my_accuracy_layer.cpp:88] outer_num_ 54, predict_num 1, label_value 6
+I0206 15:53:43.148269 29248 caffe.cpp:313] Batch 26, accuracy = 0.98
+I0206 15:53:43.148321 29248 caffe.cpp:313] Batch 26, loss = 0.130145
+I0206 15:53:43.189107 29248 caffe.cpp:313] Batch 27, accuracy = 1
+I0206 15:53:43.189241 29248 caffe.cpp:313] Batch 27, loss = 0.0188243
+I0206 15:53:43.228080 29248 my_accuracy_layer.cpp:88] outer_num_ 96, predict_num 0, label_value 8
+I0206 15:53:43.228318 29248 caffe.cpp:313] Batch 28, accuracy = 0.99
+I0206 15:53:43.228371 29248 caffe.cpp:313] Batch 28, loss = 0.0591477
+I0206 15:53:43.266688 29248 my_accuracy_layer.cpp:88] outer_num_ 27, predict_num 2, label_value 3
+I0206 15:53:43.266779 29248 my_accuracy_layer.cpp:88] outer_num_ 39, predict_num 5, label_value 9
+I0206 15:53:43.266819 29248 my_accuracy_layer.cpp:88] outer_num_ 53, predict_num 5, label_value 3
+I0206 15:53:43.266857 29248 my_accuracy_layer.cpp:88] outer_num_ 95, predict_num 5, label_value 6
+I0206 15:53:43.267087 29248 caffe.cpp:313] Batch 29, accuracy = 0.96
+I0206 15:53:43.267156 29248 caffe.cpp:313] Batch 29, loss = 0.133303
+I0206 15:53:43.304462 29248 caffe.cpp:313] Batch 30, accuracy = 1
+I0206 15:53:43.304603 29248 caffe.cpp:313] Batch 30, loss = 0.0190801
+I0206 15:53:43.343431 29248 caffe.cpp:313] Batch 31, accuracy = 1
+I0206 15:53:43.343550 29248 caffe.cpp:313] Batch 31, loss = 0.00192211
+I0206 15:53:43.379506 29248 my_accuracy_layer.cpp:88] outer_num_ 25, predict_num 9, label_value 7
+I0206 15:53:43.379614 29248 my_accuracy_layer.cpp:88] outer_num_ 89, predict_num 9, label_value 8
+I0206 15:53:43.379812 29248 caffe.cpp:313] Batch 32, accuracy = 0.98
+I0206 15:53:43.379864 29248 caffe.cpp:313] Batch 32, loss = 0.0259934
+I0206 15:53:43.417862 29248 caffe.cpp:313] Batch 33, accuracy = 1
+I0206 15:53:43.418037 29248 caffe.cpp:313] Batch 33, loss = 0.00243373
+I0206 15:53:43.454982 29248 my_accuracy_layer.cpp:88] outer_num_ 22, predict_num 0, label_value 6
+I0206 15:53:43.455301 29248 caffe.cpp:313] Batch 34, accuracy = 0.99
+I0206 15:53:43.455358 29248 caffe.cpp:313] Batch 34, loss = 0.0469272
+I0206 15:53:43.493088 29248 my_accuracy_layer.cpp:88] outer_num_ 3, predict_num 1, label_value 9
+I0206 15:53:43.493224 29248 my_accuracy_layer.cpp:88] outer_num_ 20, predict_num 4, label_value 6
+I0206 15:53:43.493266 29248 my_accuracy_layer.cpp:88] outer_num_ 58, predict_num 0, label_value 5
+I0206 15:53:43.493305 29248 my_accuracy_layer.cpp:88] outer_num_ 59, predict_num 5, label_value 8
+I0206 15:53:43.493343 29248 my_accuracy_layer.cpp:88] outer_num_ 74, predict_num 7, label_value 0
+I0206 15:53:43.493381 29248 my_accuracy_layer.cpp:88] outer_num_ 97, predict_num 3, label_value 9
+I0206 15:53:43.493577 29248 caffe.cpp:313] Batch 35, accuracy = 0.94
+I0206 15:53:43.493629 29248 caffe.cpp:313] Batch 35, loss = 0.131994
+I0206 15:53:43.532883 29248 caffe.cpp:313] Batch 36, accuracy = 1
+I0206 15:53:43.533031 29248 caffe.cpp:313] Batch 36, loss = 0.0042363
+I0206 15:53:43.570035 29248 my_accuracy_layer.cpp:88] outer_num_ 27, predict_num 9, label_value 8
+I0206 15:53:43.570282 29248 my_accuracy_layer.cpp:88] outer_num_ 67, predict_num 2, label_value 7
+I0206 15:53:43.570484 29248 caffe.cpp:313] Batch 37, accuracy = 0.98
+I0206 15:53:43.570535 29248 caffe.cpp:313] Batch 37, loss = 0.0436271
+I0206 15:53:43.608273 29248 my_accuracy_layer.cpp:88] outer_num_ 8, predict_num 8, label_value 7
+I0206 15:53:43.608583 29248 caffe.cpp:313] Batch 38, accuracy = 0.99
+I0206 15:53:43.608638 29248 caffe.cpp:313] Batch 38, loss = 0.0278653
+I0206 15:53:43.646976 29248 my_accuracy_layer.cpp:88] outer_num_ 6, predict_num 3, label_value 1
+I0206 15:53:43.651422 29248 my_accuracy_layer.cpp:88] outer_num_ 85, predict_num 4, label_value 9
+I0206 15:53:43.651608 29248 caffe.cpp:313] Batch 39, accuracy = 0.98
+I0206 15:53:43.651624 29248 caffe.cpp:313] Batch 39, loss = 0.048517
+I0206 15:53:43.693379 29248 caffe.cpp:313] Batch 40, accuracy = 1
+I0206 15:53:43.693503 29248 caffe.cpp:313] Batch 40, loss = 0.019825
+I0206 15:53:43.732731 29248 my_accuracy_layer.cpp:88] outer_num_ 63, predict_num 0, label_value 9
+I0206 15:53:43.732815 29248 my_accuracy_layer.cpp:88] outer_num_ 76, predict_num 7, label_value 2
+I0206 15:53:43.733042 29248 caffe.cpp:313] Batch 41, accuracy = 0.98
+I0206 15:53:43.733103 29248 caffe.cpp:313] Batch 41, loss = 0.084978
+I0206 15:53:43.770306 29248 my_accuracy_layer.cpp:88] outer_num_ 24, predict_num 7, label_value 9
+I0206 15:53:43.775300 29248 caffe.cpp:313] Batch 42, accuracy = 0.99
+I0206 15:53:43.775331 29248 caffe.cpp:313] Batch 42, loss = 0.0248702
+I0206 15:53:43.815243 29248 caffe.cpp:313] Batch 43, accuracy = 1
+I0206 15:53:43.815428 29248 caffe.cpp:313] Batch 43, loss = 0.0112562
+I0206 15:53:43.854737 29248 my_accuracy_layer.cpp:88] outer_num_ 97, predict_num 7, label_value 8
+I0206 15:53:43.855145 29248 caffe.cpp:313] Batch 44, accuracy = 0.99
+I0206 15:53:43.855213 29248 caffe.cpp:313] Batch 44, loss = 0.0296944
+I0206 15:53:43.894671 29248 my_accuracy_layer.cpp:88] outer_num_ 36, predict_num 5, label_value 6
+I0206 15:53:43.900224 29248 caffe.cpp:313] Batch 45, accuracy = 0.99
+I0206 15:53:43.900327 29248 caffe.cpp:313] Batch 45, loss = 0.0589109
+I0206 15:53:43.940327 29248 my_accuracy_layer.cpp:88] outer_num_ 39, predict_num 9, label_value 8
+I0206 15:53:43.940600 29248 caffe.cpp:313] Batch 46, accuracy = 0.99
+I0206 15:53:43.940654 29248 caffe.cpp:313] Batch 46, loss = 0.0129178
+I0206 15:53:43.978994 29248 my_accuracy_layer.cpp:88] outer_num_ 40, predict_num 5, label_value 3
+I0206 15:53:43.979290 29248 caffe.cpp:313] Batch 47, accuracy = 0.99
+I0206 15:53:43.979343 29248 caffe.cpp:313] Batch 47, loss = 0.0267543
+I0206 15:53:44.014911 29248 my_accuracy_layer.cpp:88] outer_num_ 7, predict_num 0, label_value 8
+I0206 15:53:44.015063 29248 my_accuracy_layer.cpp:88] outer_num_ 14, predict_num 0, label_value 6
+I0206 15:53:44.015107 29248 my_accuracy_layer.cpp:88] outer_num_ 23, predict_num 4, label_value 9
+I0206 15:53:44.015149 29248 my_accuracy_layer.cpp:88] outer_num_ 80, predict_num 8, label_value 0
+I0206 15:53:44.015348 29248 caffe.cpp:313] Batch 48, accuracy = 0.96
+I0206 15:53:44.015403 29248 caffe.cpp:313] Batch 48, loss = 0.0857927
+I0206 15:53:44.052320 29248 caffe.cpp:313] Batch 49, accuracy = 1
+I0206 15:53:44.052415 29248 caffe.cpp:313] Batch 49, loss = 0.00721076
+I0206 15:53:44.091581 29248 caffe.cpp:313] Batch 50, accuracy = 1
+I0206 15:53:44.091701 29248 caffe.cpp:313] Batch 50, loss = 0.000317954
+I0206 15:53:44.128743 29248 caffe.cpp:313] Batch 51, accuracy = 1
+I0206 15:53:44.128865 29248 caffe.cpp:313] Batch 51, loss = 0.00589326
+I0206 15:53:44.166323 29248 caffe.cpp:313] Batch 52, accuracy = 1
+I0206 15:53:44.166450 29248 caffe.cpp:313] Batch 52, loss = 0.00612813
+I0206 15:53:44.205840 29248 caffe.cpp:313] Batch 53, accuracy = 1
+I0206 15:53:44.205881 29248 caffe.cpp:313] Batch 53, loss = 0.00269774
+I0206 15:53:44.244099 29248 caffe.cpp:313] Batch 54, accuracy = 1
+I0206 15:53:44.244205 29248 caffe.cpp:313] Batch 54, loss = 0.00510644
+I0206 15:53:44.280812 29248 caffe.cpp:313] Batch 55, accuracy = 1
+I0206 15:53:44.280925 29248 caffe.cpp:313] Batch 55, loss = 0.000207741
+I0206 15:53:44.318347 29248 caffe.cpp:313] Batch 56, accuracy = 1
+I0206 15:53:44.318512 29248 caffe.cpp:313] Batch 56, loss = 0.0125655
+I0206 15:53:44.355403 29248 caffe.cpp:313] Batch 57, accuracy = 1
+I0206 15:53:44.355531 29248 caffe.cpp:313] Batch 57, loss = 0.00316186
+I0206 15:53:44.391541 29248 my_accuracy_layer.cpp:88] outer_num_ 87, predict_num 0, label_value 7
+I0206 15:53:44.391811 29248 caffe.cpp:313] Batch 58, accuracy = 0.99
+I0206 15:53:44.391865 29248 caffe.cpp:313] Batch 58, loss = 0.0132969
+I0206 15:53:44.431413 29248 my_accuracy_layer.cpp:88] outer_num_ 37, predict_num 3, label_value 5
+I0206 15:53:44.431533 29248 my_accuracy_layer.cpp:88] outer_num_ 55, predict_num 8, label_value 3
+I0206 15:53:44.431573 29248 my_accuracy_layer.cpp:88] outer_num_ 73, predict_num 8, label_value 3
+I0206 15:53:44.431771 29248 caffe.cpp:313] Batch 59, accuracy = 0.97
+I0206 15:53:44.431821 29248 caffe.cpp:313] Batch 59, loss = 0.0974303
+I0206 15:53:44.469211 29248 caffe.cpp:313] Batch 60, accuracy = 1
+I0206 15:53:44.469352 29248 caffe.cpp:313] Batch 60, loss = 0.00442679
+I0206 15:53:44.507333 29248 caffe.cpp:313] Batch 61, accuracy = 1
+I0206 15:53:44.507462 29248 caffe.cpp:313] Batch 61, loss = 0.00389473
+I0206 15:53:44.544211 29248 caffe.cpp:313] Batch 62, accuracy = 1
+I0206 15:53:44.544342 29248 caffe.cpp:313] Batch 62, loss = 3.91016e-05
+I0206 15:53:44.580297 29248 caffe.cpp:313] Batch 63, accuracy = 1
+I0206 15:53:44.580407 29248 caffe.cpp:313] Batch 63, loss = 0.000196462
+I0206 15:53:44.618731 29248 caffe.cpp:313] Batch 64, accuracy = 1
+I0206 15:53:44.618868 29248 caffe.cpp:313] Batch 64, loss = 0.000512143
+I0206 15:53:44.653828 29248 my_accuracy_layer.cpp:88] outer_num_ 55, predict_num 9, label_value 8
+I0206 15:53:44.654003 29248 my_accuracy_layer.cpp:88] outer_num_ 60, predict_num 5, label_value 9
+I0206 15:53:44.654059 29248 my_accuracy_layer.cpp:88] outer_num_ 72, predict_num 7, label_value 1
+I0206 15:53:44.654099 29248 my_accuracy_layer.cpp:88] outer_num_ 76, predict_num 1, label_value 7
+I0206 15:53:44.654136 29248 my_accuracy_layer.cpp:88] outer_num_ 97, predict_num 7, label_value 0
+I0206 15:53:44.654335 29248 caffe.cpp:313] Batch 65, accuracy = 0.95
+I0206 15:53:44.654386 29248 caffe.cpp:313] Batch 65, loss = 0.115505
+I0206 15:53:44.690759 29248 my_accuracy_layer.cpp:88] outer_num_ 25, predict_num 2, label_value 8
+I0206 15:53:44.690882 29248 my_accuracy_layer.cpp:88] outer_num_ 51, predict_num 8, label_value 0
+I0206 15:53:44.691092 29248 caffe.cpp:313] Batch 66, accuracy = 0.98
+I0206 15:53:44.691149 29248 caffe.cpp:313] Batch 66, loss = 0.0524778
+I0206 15:53:44.727794 29248 my_accuracy_layer.cpp:88] outer_num_ 83, predict_num 6, label_value 1
+I0206 15:53:44.728137 29248 caffe.cpp:313] Batch 67, accuracy = 0.99
+I0206 15:53:44.728214 29248 caffe.cpp:313] Batch 67, loss = 0.034493
+I0206 15:53:44.764804 29248 my_accuracy_layer.cpp:88] outer_num_ 47, predict_num 4, label_value 6
+I0206 15:53:44.765056 29248 caffe.cpp:313] Batch 68, accuracy = 0.99
+I0206 15:53:44.765115 29248 caffe.cpp:313] Batch 68, loss = 0.00955756
+I0206 15:53:44.802291 29248 my_accuracy_layer.cpp:88] outer_num_ 45, predict_num 7, label_value 8
+I0206 15:53:44.802687 29248 caffe.cpp:313] Batch 69, accuracy = 0.99
+I0206 15:53:44.802749 29248 caffe.cpp:313] Batch 69, loss = 0.00827322
+I0206 15:53:44.838346 29248 caffe.cpp:313] Batch 70, accuracy = 1
+I0206 15:53:44.838524 29248 caffe.cpp:313] Batch 70, loss = 0.000669049
+I0206 15:53:44.874647 29248 caffe.cpp:313] Batch 71, accuracy = 1
+I0206 15:53:44.874783 29248 caffe.cpp:313] Batch 71, loss = 0.000384513
+I0206 15:53:44.910630 29248 my_accuracy_layer.cpp:88] outer_num_ 16, predict_num 6, label_value 0
+I0206 15:53:44.910918 29248 caffe.cpp:313] Batch 72, accuracy = 0.99
+I0206 15:53:44.910971 29248 caffe.cpp:313] Batch 72, loss = 0.0161823
+I0206 15:53:44.947912 29248 caffe.cpp:313] Batch 73, accuracy = 1
+I0206 15:53:44.948060 29248 caffe.cpp:313] Batch 73, loss = 0.000107801
+I0206 15:53:44.985524 29248 caffe.cpp:313] Batch 74, accuracy = 1
+I0206 15:53:44.985625 29248 caffe.cpp:313] Batch 74, loss = 0.00193699
+I0206 15:53:45.023859 29248 caffe.cpp:313] Batch 75, accuracy = 1
+I0206 15:53:45.023983 29248 caffe.cpp:313] Batch 75, loss = 0.000628575
+I0206 15:53:45.059787 29248 caffe.cpp:313] Batch 76, accuracy = 1
+I0206 15:53:45.059908 29248 caffe.cpp:313] Batch 76, loss = 0.000189886
+I0206 15:53:45.096449 29248 caffe.cpp:313] Batch 77, accuracy = 1
+I0206 15:53:45.096601 29248 caffe.cpp:313] Batch 77, loss = 0.000203561
+I0206 15:53:45.133105 29248 caffe.cpp:313] Batch 78, accuracy = 1
+I0206 15:53:45.133237 29248 caffe.cpp:313] Batch 78, loss = 0.00219014
+I0206 15:53:45.168918 29248 caffe.cpp:313] Batch 79, accuracy = 1
+I0206 15:53:45.169068 29248 caffe.cpp:313] Batch 79, loss = 0.00562458
+I0206 15:53:45.205005 29248 my_accuracy_layer.cpp:88] outer_num_ 94, predict_num 8, label_value 2
+I0206 15:53:45.205364 29248 caffe.cpp:313] Batch 80, accuracy = 0.99
+I0206 15:53:45.205422 29248 caffe.cpp:313] Batch 80, loss = 0.0204436
+I0206 15:53:45.244005 29248 caffe.cpp:313] Batch 81, accuracy = 1
+I0206 15:53:45.244134 29248 caffe.cpp:313] Batch 81, loss = 0.00165626
+I0206 15:53:45.282234 29248 caffe.cpp:313] Batch 82, accuracy = 1
+I0206 15:53:45.282390 29248 caffe.cpp:313] Batch 82, loss = 0.00135268
+I0206 15:53:45.319538 29248 my_accuracy_layer.cpp:88] outer_num_ 16, predict_num 2, label_value 7
+I0206 15:53:45.319831 29248 caffe.cpp:313] Batch 83, accuracy = 0.99
+I0206 15:53:45.319885 29248 caffe.cpp:313] Batch 83, loss = 0.0149065
+I0206 15:53:45.357156 29248 my_accuracy_layer.cpp:88] outer_num_ 8, predict_num 6, label_value 8
+I0206 15:53:45.357441 29248 caffe.cpp:313] Batch 84, accuracy = 0.99
+I0206 15:53:45.357496 29248 caffe.cpp:313] Batch 84, loss = 0.0325565
+I0206 15:53:45.394345 29248 my_accuracy_layer.cpp:88] outer_num_ 27, predict_num 9, label_value 4
+I0206 15:53:45.394614 29248 caffe.cpp:313] Batch 85, accuracy = 0.99
+I0206 15:53:45.394667 29248 caffe.cpp:313] Batch 85, loss = 0.0139446
+I0206 15:53:45.430219 29248 caffe.cpp:313] Batch 86, accuracy = 1
+I0206 15:53:45.430346 29248 caffe.cpp:313] Batch 86, loss = 9.10439e-05
+I0206 15:53:45.467279 29248 caffe.cpp:313] Batch 87, accuracy = 1
+I0206 15:53:45.467407 29248 caffe.cpp:313] Batch 87, loss = 0.000237239
+I0206 15:53:45.506280 29248 caffe.cpp:313] Batch 88, accuracy = 1
+I0206 15:53:45.506369 29248 caffe.cpp:313] Batch 88, loss = 3.12772e-05
+I0206 15:53:45.543663 29248 caffe.cpp:313] Batch 89, accuracy = 1
+I0206 15:53:45.543766 29248 caffe.cpp:313] Batch 89, loss = 3.25093e-05
+I0206 15:53:45.582319 29248 my_accuracy_layer.cpp:88] outer_num_ 9, predict_num 2, label_value 7
+I0206 15:53:45.582587 29248 my_accuracy_layer.cpp:88] outer_num_ 15, predict_num 2, label_value 7
+I0206 15:53:45.582634 29248 my_accuracy_layer.cpp:88] outer_num_ 19, predict_num 2, label_value 7
+I0206 15:53:45.582674 29248 my_accuracy_layer.cpp:88] outer_num_ 24, predict_num 2, label_value 7
+I0206 15:53:45.582904 29248 caffe.cpp:313] Batch 90, accuracy = 0.96
+I0206 15:53:45.582969 29248 caffe.cpp:313] Batch 90, loss = 0.0987953
+I0206 15:53:45.620841 29248 caffe.cpp:313] Batch 91, accuracy = 1
+I0206 15:53:45.620978 29248 caffe.cpp:313] Batch 91, loss = 5.18317e-05
+I0206 15:53:45.658221 29248 caffe.cpp:313] Batch 92, accuracy = 1
+I0206 15:53:45.658354 29248 caffe.cpp:313] Batch 92, loss = 0.000142432
+I0206 15:53:45.694519 29248 caffe.cpp:313] Batch 93, accuracy = 1
+I0206 15:53:45.694645 29248 caffe.cpp:313] Batch 93, loss = 0.000384621
+I0206 15:53:45.730607 29248 caffe.cpp:313] Batch 94, accuracy = 1
+I0206 15:53:45.730722 29248 caffe.cpp:313] Batch 94, loss = 0.000604595
+I0206 15:53:45.768215 29248 caffe.cpp:313] Batch 95, accuracy = 1
+I0206 15:53:45.768352 29248 caffe.cpp:313] Batch 95, loss = 0.00419766
+I0206 15:53:45.768930 29251 data_layer.cpp:73] Restarting data prefetching from start.
+I0206 15:53:45.805310 29248 my_accuracy_layer.cpp:88] outer_num_ 34, predict_num 8, label_value 0
+I0206 15:53:45.805440 29248 my_accuracy_layer.cpp:88] outer_num_ 64, predict_num 7, label_value 2
+I0206 15:53:45.805481 29248 my_accuracy_layer.cpp:88] outer_num_ 79, predict_num 3, label_value 6
+I0206 15:53:45.805680 29248 caffe.cpp:313] Batch 96, accuracy = 0.97
+I0206 15:53:45.805730 29248 caffe.cpp:313] Batch 96, loss = 0.080768
+I0206 15:53:45.842092 29248 my_accuracy_layer.cpp:88] outer_num_ 29, predict_num 6, label_value 5
+I0206 15:53:45.842217 29248 my_accuracy_layer.cpp:88] outer_num_ 70, predict_num 0, label_value 5
+I0206 15:53:45.842447 29248 caffe.cpp:313] Batch 97, accuracy = 0.98
+I0206 15:53:45.842535 29248 caffe.cpp:313] Batch 97, loss = 0.0791423
+I0206 15:53:45.880223 29248 caffe.cpp:313] Batch 98, accuracy = 1
+I0206 15:53:45.880345 29248 caffe.cpp:313] Batch 98, loss = 0.0052769
+I0206 15:53:45.917145 29248 caffe.cpp:313] Batch 99, accuracy = 1
+I0206 15:53:45.917250 29248 caffe.cpp:313] Batch 99, loss = 0.00484809
+I0206 15:53:45.917294 29248 caffe.cpp:318] Loss: 0.030031
+I0206 15:53:45.917341 29248 caffe.cpp:330] accuracy = 0.9903
+I0206 15:53:45.917387 29248 caffe.cpp:330] loss = 0.030031 (* 1 = 0.030031 loss)
